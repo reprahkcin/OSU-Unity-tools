@@ -8,13 +8,16 @@ using System.Collections.Generic;
 
 public class TemplatePages : EditorWindow
 {
+
+    
+
+
     //
     // Prefab stuff - under the hood
     //
     public GameObject nav_btn;
     public TMP_FontAsset header_font;
     public TMP_FontAsset body_font;
-    public TextMeshProUGUI header_prefab;
 
     //
     // Default values
@@ -35,6 +38,9 @@ public class TemplatePages : EditorWindow
 
 
 
+
+
+
     [MenuItem("Window/OSU Template Pages")]
     public static void ShowWindow()
     {
@@ -42,43 +48,71 @@ public class TemplatePages : EditorWindow
     }
 
 
+    //
+    // Horizontal Line setup
+    //
+    GUIStyle horizontalLine;
+    void HorizontalLine(Color color)
+    {
+        horizontalLine = new GUIStyle();
+        horizontalLine.normal.background = EditorGUIUtility.whiteTexture;
+        horizontalLine.margin = new RectOffset(0, 0, 25, 25);
+        horizontalLine.fixedHeight = 4;
+        var c = GUI.color;
+        GUI.color = color;
+        GUILayout.Box(GUIContent.none, horizontalLine);
+        GUI.color = c;
+    }
+
     void OnGUI()
     {
         
-        GUILayout.Label("Canvas Reference Dimensions:", EditorStyles.boldLabel);
-        width = EditorGUILayout.IntField("Width", width);
-        height = EditorGUILayout.IntField("Height", height);
+        GUIStyle marginTop = new GUIStyle();
+        marginTop.margin = new RectOffset(0,0,0,0);
 
-        GUILayout.Label("Set Colors:", EditorStyles.boldLabel);
+        GUIStyle gstyle = new GUIStyle();
+        gstyle.wordWrap = true;
+        gstyle.padding = new RectOffset(10, 10, 0, 5);
+
+        GUILayout.Label("", marginTop);
+        GUILayout.Label("Project Colors:", EditorStyles.boldLabel );
+        GUILayout.Label("Select the main colors for your project.", gstyle);
+
         bg_color = EditorGUILayout.ColorField("Background Color", bg_color);
         text_color = EditorGUILayout.ColorField("Text Color", text_color);
 
-        if (GUILayout.Button("Generate Canvas"))
-        {
-            GenerateCanvas();
-        }
+        HorizontalLine(Color.grey);
 
         if (GameObject.Find("Canvas"))
         {
-            //GUILayout.Label("Prefabs:", EditorStyles.boldLabel);
-            //nav_btn = EditorGUILayout.ObjectField("button", nav_btn, typeof(GameObject), true) as GameObject;
 
+        }
+        else
+        {
 
-            GUILayout.Label("Basic Elements:", EditorStyles.boldLabel);
-            header_txt = EditorGUILayout.TextField("Header Text", "");
-            if (GUILayout.Button("Generate Header"))
+            GUILayout.Label("Generate Canvas:", EditorStyles.boldLabel);
+            GUILayout.Label("Get started by creating a canvas object. It will be created with a navigation script attached. Use those methods with any created buttons to control the slides.", gstyle);
+
+            width = EditorGUILayout.IntField("Width", width);
+            height = EditorGUILayout.IntField("Height", height);
+
+            if (GUILayout.Button("Generate Canvas"))
             {
-                GenerateHeader();
+                GenerateCanvas();
             }
+        }
 
-            body_txt = EditorGUILayout.TextField("Body Text", "");
-            img = EditorGUILayout.ObjectField("Image", img, typeof(Sprite), true) as Sprite;
+
+        if (GameObject.Find("Canvas"))
+        {
+            
+            GUILayout.Label("Generate Panels:", EditorStyles.boldLabel);
+            GUILayout.Label("Create as many panels as you would like. Run 'Panel Cleanup' function if you remove any along the way.",gstyle);
 
             if (GUILayout.Button("Generate Panel"))
             {
                 GeneratePanel();
             }
-
             if (GUILayout.Button("Panel Cleanup"))
             {
                 if (new_canvas != null)
@@ -88,26 +122,70 @@ public class TemplatePages : EditorWindow
                 }
             }
 
+            HorizontalLine(Color.grey);
+
+            GUILayout.Label("Formatted Text Components:", EditorStyles.boldLabel);
+            GUILayout.Label("Use this portion of the utility to generate text objects with the pre-determined styling. Make sure to select the parent object in the hierarchy before generating.", gstyle);
+
+            header_txt = EditorGUILayout.TextField("Header Text", header_txt);
+            if(GUILayout.Button("Generate Header Text"))
+            {
+                GenerateHeader();
+            }
+            GUILayout.Label("", marginTop);
+            body_txt = EditorGUILayout.TextArea(body_txt,GUILayout.Height(100));
+            if (GUILayout.Button("Generate Body Text"))
+            {
+                GenerateBody();
+            }
+            HorizontalLine(Color.grey);
+
+
+
+
+
             GUILayout.Label("Button Creator:", EditorStyles.boldLabel);
-            GUILayout.Label("(Select panel first)");
+            GUILayout.Label("Type the text you would like to appear on your button in the box below, select the parent panel in the hierarchy, then generate.", gstyle);
+
             btn_txt = EditorGUILayout.TextField(btn_txt);
 
             if (GUILayout.Button("Generate Button"))
             {
                 GenerateButton();
+                
             }
 
         }
     }
 
-    private void GenerateHeader()
-    {
 
-        TextMeshProUGUI hdr = Instantiate(header_prefab);
-        
+    void GenerateHeader()
+    {
+        GameObject hdr_txt = new GameObject("header_text");
+        hdr_txt.AddComponent<TextMeshProUGUI>();
+        hdr_txt.GetComponent<TextMeshProUGUI>().text = header_txt;
+        hdr_txt.GetComponent<TextMeshProUGUI>().font = header_font;
+        hdr_txt.GetComponent<TextMeshProUGUI>().fontSize = 60f;
+        hdr_txt.GetComponent<TextMeshProUGUI>().color = text_color;
+        hdr_txt.GetComponent<RectTransform>().sizeDelta = new Vector2(width, 68);
+        hdr_txt.GetComponent<TextMeshProUGUI>().alignment = TextAlignmentOptions.Center;
+        hdr_txt.transform.SetParent(Selection.activeTransform, false);
     }
 
-    private void GenerateButton()
+    void GenerateBody()
+    {
+        GameObject bdy_txt = new GameObject("body_text");
+        bdy_txt.AddComponent<TextMeshProUGUI>();
+        bdy_txt.GetComponent<TextMeshProUGUI>().text = body_txt;
+        bdy_txt.GetComponent<TextMeshProUGUI>().font = body_font;
+        bdy_txt.GetComponent<TextMeshProUGUI>().fontSize = 36f;
+        bdy_txt.GetComponent<TextMeshProUGUI>().color = text_color;
+        bdy_txt.GetComponent<RectTransform>().sizeDelta = new Vector2(width, height);
+        bdy_txt.GetComponent<TextMeshProUGUI>().alignment = TextAlignmentOptions.Left;
+        bdy_txt.transform.SetParent(Selection.activeTransform, false);
+    }
+
+    void GenerateButton()
     {
         GameObject btn = Instantiate(nav_btn);
         btn.GetComponentInChildren<TextMeshProUGUI>().text = btn_txt;
