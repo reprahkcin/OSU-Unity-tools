@@ -7,14 +7,17 @@ using System.Collections.Generic;
 
 public class TemplatePages : EditorWindow
 {
-    
-    private GameObject new_canvas;
 
-    public Color bg_color = new Color32(75,75,75,255);
+    private GameObject new_canvas;
+    public GameObject nav_btn;
+    public string btn_txt;
+
+    private Color bg_color = new Color32(75,75,75,255);
     private Color text_color = new Color32(255,255,255,255);
     private Color nav_button_color = new Color32(215, 63, 9, 255);
     private TMP_FontAsset header_font;
     private TMP_FontAsset body_font;
+    private TMP_FontAsset button_font;
     private string header_text;
     private string body_text;
     private Sprite img;
@@ -29,11 +32,10 @@ public class TemplatePages : EditorWindow
     }
 
 
-
     void OnGUI()
     {
         
-        GUILayout.Label("Page Reference Dimensions:", EditorStyles.boldLabel);
+        GUILayout.Label("Canvas Reference Dimensions:", EditorStyles.boldLabel);
         width = EditorGUILayout.IntField("Width", width);
         height = EditorGUILayout.IntField("Height", height);
         if (GUILayout.Button("Generate Canvas"))
@@ -41,34 +43,57 @@ public class TemplatePages : EditorWindow
             GenerateCanvas();
         }
 
-
-        GUILayout.Label("Set Colors:", EditorStyles.boldLabel);
-        bg_color = EditorGUILayout.ColorField("Background Color", bg_color);
-        text_color = EditorGUILayout.ColorField("Text Color", text_color);
-        nav_button_color = EditorGUILayout.ColorField("Button Color", nav_button_color);
-        GUILayout.Label("Set Fonts:", EditorStyles.boldLabel);
-        header_font = EditorGUILayout.ObjectField("Header Font", header_font, typeof(TMP_FontAsset), true) as TMP_FontAsset;
-        body_font = EditorGUILayout.ObjectField("Body Font", body_font, typeof(TMP_FontAsset), true) as TMP_FontAsset;
-        GUILayout.Label("Basic Elements:", EditorStyles.boldLabel);
-        header_text = EditorGUILayout.TextField("Header Text", "");
-        body_text = EditorGUILayout.TextField("Body Text", "");
-        img = EditorGUILayout.ObjectField("Image", img, typeof(Sprite), true) as Sprite;
-
-
-
-        if (GUILayout.Button("Generate Panel"))
+        if (GameObject.Find("Canvas"))
         {
-            GeneratePanel();
-        }
-        if (GUILayout.Button("Panel Cleanup"))
-        {
-            if (new_canvas != null)
+            GUILayout.Label("Prefabs:", EditorStyles.boldLabel);
+            nav_btn = EditorGUILayout.ObjectField("button", nav_btn, typeof(GameObject), true) as GameObject;
+
+            GUILayout.Label("Set Colors:", EditorStyles.boldLabel);
+            bg_color = EditorGUILayout.ColorField("Background Color", bg_color);
+            text_color = EditorGUILayout.ColorField("Text Color", text_color);
+            nav_button_color = EditorGUILayout.ColorField("Button Color", nav_button_color);
+
+
+
+            GUILayout.Label("Set Fonts:", EditorStyles.boldLabel);
+            header_font = EditorGUILayout.ObjectField("Header Font", header_font, typeof(TMP_FontAsset), true) as TMP_FontAsset;
+            body_font = EditorGUILayout.ObjectField("Body Font", body_font, typeof(TMP_FontAsset), true) as TMP_FontAsset;
+
+
+            GUILayout.Label("Basic Elements:", EditorStyles.boldLabel);
+            header_text = EditorGUILayout.TextField("Header Text", "");
+            body_text = EditorGUILayout.TextField("Body Text", "");
+            img = EditorGUILayout.ObjectField("Image", img, typeof(Sprite), true) as Sprite;
+
+            if (GUILayout.Button("Generate Panel"))
             {
-                Navigation nav = new_canvas.GetComponent<Navigation>();
-                nav.ListCleanup();
+                GeneratePanel();
             }
-            
+
+            if (GUILayout.Button("Panel Cleanup"))
+            {
+                if (new_canvas != null)
+                {
+                    Navigation nav = new_canvas.GetComponent<Navigation>();
+                    nav.ListCleanup();
+                }
+            }
+
+            GUILayout.Label("Button Creator", EditorStyles.boldLabel);
+            GUILayout.Label("(Select panel first)");
+            btn_txt = EditorGUILayout.TextField(btn_txt);
+            if (GUILayout.Button("Generate Button"))
+            {
+                GameObject btn = Instantiate(nav_btn);
+                btn.GetComponentInChildren<TextMeshProUGUI>().text = btn_txt;
+                btn.name = "Button";
+                btn.transform.SetParent(Selection.activeTransform, false);
+            }
+
         }
+        
+
+
 
     }
 
@@ -91,6 +116,7 @@ public class TemplatePages : EditorWindow
 
         // Generate Opening Slide
         GameObject opening_panel = new GameObject("Panel0");
+        opening_panel.tag = "panel";
         opening_panel.AddComponent<CanvasRenderer>();
         opening_panel.AddComponent<RectTransform>();
         Image i = opening_panel.AddComponent<Image>();
@@ -113,30 +139,32 @@ public class TemplatePages : EditorWindow
         panel.AddComponent<RectTransform>();
         Image i = panel.AddComponent<Image>();
         i.color = bg_color;
+        panel.tag = "panel";
         panel.GetComponent<RectTransform>().sizeDelta = new Vector2(width, height);
         // Add the panel as a child of the new canvas
         panel.transform.SetParent(new_canvas.transform, false);
         nav.AddToPanels(panel);
 
 
-        // Create Button
-        GameObject next_button = new GameObject("Next Button");
-        // Create Button text
-        GameObject next_button_text = new GameObject("Text");
-        next_button_text.AddComponent<CanvasRenderer>();
-        next_button_text.AddComponent<TextMeshProUGUI>();
-        next_button_text.GetComponent<TextMeshProUGUI>().text = "Next";
-        next_button_text.GetComponent<TextMeshProUGUI>().font = header_font;
-        next_button_text.transform.SetParent(next_button.transform, false);
-        next_button.AddComponent<RectTransform>();
-        next_button.GetComponent<RectTransform>().sizeDelta = new Vector2(160, 30);
-        next_button.transform.SetParent(panel.transform, false);
-        next_button.AddComponent<CanvasRenderer>();
-        Image i_next = next_button.AddComponent<Image>();
-        i_next.color = nav_button_color;
-        i_next.type = Image.Type.Sliced;
-        i_next.fillCenter = true;
-        next_button.AddComponent<Button>();
+        //// Create Button
+        //GameObject btn = new GameObject("Button");
+        //// Create Button text
+        //GameObject btn_txt = new GameObject("Text");
+        //btn_txt.AddComponent<CanvasRenderer>();
+        //btn_txt.AddComponent<TextMeshProUGUI>();
+        //TextMeshProUGUI t = btn_txt.GetComponent<TextMeshProUGUI>();
+        //t.text = "BUTTON";
+        //t.font = header_font;
+        //btn_txt.transform.SetParent(btn.transform, false);
+        //btn.AddComponent<RectTransform>();
+        //btn.GetComponent<RectTransform>().sizeDelta = new Vector2(160, 30);
+        //btn.transform.SetParent(panel.transform, false);
+        //btn.AddComponent<CanvasRenderer>();
+        //Image i_next = btn.AddComponent<Image>();
+        //i_next.color = nav_button_color;
+        //i_next.type = Image.Type.Sliced;
+        //i_next.fillCenter = true;
+        //btn.AddComponent<Button>();
 
 
 
