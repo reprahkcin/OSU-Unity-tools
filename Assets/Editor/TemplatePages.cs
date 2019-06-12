@@ -9,15 +9,16 @@ using System.Collections.Generic;
 public class TemplatePages : EditorWindow
 {
 
-    
-
 
     //
     // Prefab stuff - under the hood
     //
     public GameObject nav_btn;
+    public GameObject next_btn;
+    public GameObject last_btn;
     public TMP_FontAsset header_font;
     public TMP_FontAsset body_font;
+    private Navigation navigation;
 
     //
     // Default values
@@ -35,9 +36,6 @@ public class TemplatePages : EditorWindow
     private string header_txt;
     private string body_txt;
     private Sprite img;
-
-
-
 
 
 
@@ -155,7 +153,47 @@ public class TemplatePages : EditorWindow
                 
             }
 
+            HorizontalLine(Color.grey);
+
+            GUILayout.Label("Generate Navigation:", EditorStyles.boldLabel);
+            GUILayout.Label("The button below will generate a panel that will overlay basic navigtion controls on your project", gstyle);
+
+            if (GUILayout.Button("Generate Navigation"))
+            {
+                GenerateNavigation();
+
+            }
+
         }
+    }
+
+    void GenerateNavigation()
+    {
+        GameObject nav_panel = new GameObject("navigation_panel");
+        nav_panel.AddComponent<CanvasRenderer>();
+        nav_panel.AddComponent<Image>();
+        nav_panel.GetComponent<Image>().color = new Color(0,0,0,0);
+        nav_panel.GetComponent<Image>().raycastTarget = false;
+        nav_panel.GetComponent<RectTransform>().sizeDelta = new Vector2(width, height);
+        nav_panel.AddComponent<HorizontalLayoutGroup>();
+        nav_panel.GetComponent<HorizontalLayoutGroup>().childAlignment = TextAnchor.LowerCenter;
+        nav_panel.GetComponent<HorizontalLayoutGroup>().padding = new RectOffset(0,0,0,15);
+        nav_panel.transform.SetParent(GameObject.Find("Canvas").transform, false);
+        
+        GameObject last_button = Instantiate(last_btn);
+        last_button.name = "prev_btn";
+        last_button.GetComponentInChildren<TextMeshProUGUI>().text = "PREVIOUS";
+        last_button.GetComponentInChildren<TextMeshProUGUI>().font = header_font;
+        last_button.transform.SetParent(nav_panel.transform, true);
+
+
+        
+        GameObject next_button = Instantiate(next_btn);
+        next_button.name = "next_btn";
+        next_button.GetComponentInChildren<TextMeshProUGUI>().text = "NEXT";
+        next_button.GetComponentInChildren<TextMeshProUGUI>().font = header_font;
+        next_button.transform.SetParent(nav_panel.transform, true);
+
     }
 
 
