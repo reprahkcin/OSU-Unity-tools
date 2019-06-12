@@ -3,7 +3,14 @@ guid: 0f6ef49dc20952545a72300259faa36d
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - m_ViewDataDictionary: {instanceID: 0}
+  - nav_btn: {fileID: 6870300465907623608, guid: 0362ef6f9488d8d49aaed90be41fadce,
+      type: 3}
+  - header_font: {fileID: 11400000, guid: 57c359202ffa00d4587852522cfdd835, type: 2}
+  - body_font: {fileID: 11400000, guid: 89795743e82d5f04b9b210f54abe5e00, type: 2}
+  - header_prefab: {fileID: 8548168592720482996, guid: 1d478490d2e5541449d1f2a2a3dd171c,
+      type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

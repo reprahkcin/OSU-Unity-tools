@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEditor;
 using TMPro;
 using UnityEngine.UI;
@@ -7,30 +8,37 @@ using System.Collections.Generic;
 
 public class TemplatePages : EditorWindow
 {
-
-    private GameObject new_canvas;
+    //
+    // Prefab stuff - under the hood
+    //
     public GameObject nav_btn;
-    public string btn_txt;
+    public TMP_FontAsset header_font;
+    public TMP_FontAsset body_font;
+    public TextMeshProUGUI header_prefab;
 
+    //
+    // Default values
+    //
     private Color bg_color = new Color32(75,75,75,255);
     private Color text_color = new Color32(255,255,255,255);
-    private Color nav_button_color = new Color32(215, 63, 9, 255);
-
-    private TMP_FontAsset header_font;
-    private TMP_FontAsset body_font;
-    private TMP_FontAsset button_font;
-
-    private string header_text;
-    private string body_text;
-    private Sprite img;
-
     private int height = 768;
     private int width = 1024;
+
+    //
+    // Placeholders
+    //
+    private GameObject new_canvas;
+    private string btn_txt;
+    private string header_txt;
+    private string body_txt;
+    private Sprite img;
+
+
 
     [MenuItem("Window/OSU Template Pages")]
     public static void ShowWindow()
     {
-        GetWindow<TemplatePages>("Page Generator");
+        GetWindow<TemplatePages>("OSU Tools");
     }
 
 
@@ -41,6 +49,10 @@ public class TemplatePages : EditorWindow
         width = EditorGUILayout.IntField("Width", width);
         height = EditorGUILayout.IntField("Height", height);
 
+        GUILayout.Label("Set Colors:", EditorStyles.boldLabel);
+        bg_color = EditorGUILayout.ColorField("Background Color", bg_color);
+        text_color = EditorGUILayout.ColorField("Text Color", text_color);
+
         if (GUILayout.Button("Generate Canvas"))
         {
             GenerateCanvas();
@@ -48,21 +60,18 @@ public class TemplatePages : EditorWindow
 
         if (GameObject.Find("Canvas"))
         {
-            GUILayout.Label("Prefabs:", EditorStyles.boldLabel);
-            nav_btn = EditorGUILayout.ObjectField("button", nav_btn, typeof(GameObject), true) as GameObject;
+            //GUILayout.Label("Prefabs:", EditorStyles.boldLabel);
+            //nav_btn = EditorGUILayout.ObjectField("button", nav_btn, typeof(GameObject), true) as GameObject;
 
-            GUILayout.Label("Set Colors:", EditorStyles.boldLabel);
-            bg_color = EditorGUILayout.ColorField("Background Color", bg_color);
-            text_color = EditorGUILayout.ColorField("Text Color", text_color);
-            nav_button_color = EditorGUILayout.ColorField("Button Color", nav_button_color);
-
-            GUILayout.Label("Set Fonts:", EditorStyles.boldLabel);
-            header_font = EditorGUILayout.ObjectField("Header Font", header_font, typeof(TMP_FontAsset), true) as TMP_FontAsset;
-            body_font = EditorGUILayout.ObjectField("Body Font", body_font, typeof(TMP_FontAsset), true) as TMP_FontAsset;
 
             GUILayout.Label("Basic Elements:", EditorStyles.boldLabel);
-            header_text = EditorGUILayout.TextField("Header Text", "");
-            body_text = EditorGUILayout.TextField("Body Text", "");
+            header_txt = EditorGUILayout.TextField("Header Text", "");
+            if (GUILayout.Button("Generate Header"))
+            {
+                GenerateHeader();
+            }
+
+            body_txt = EditorGUILayout.TextField("Body Text", "");
             img = EditorGUILayout.ObjectField("Image", img, typeof(Sprite), true) as Sprite;
 
             if (GUILayout.Button("Generate Panel"))
@@ -79,18 +88,31 @@ public class TemplatePages : EditorWindow
                 }
             }
 
-            GUILayout.Label("Button Creator", EditorStyles.boldLabel);
+            GUILayout.Label("Button Creator:", EditorStyles.boldLabel);
             GUILayout.Label("(Select panel first)");
             btn_txt = EditorGUILayout.TextField(btn_txt);
+
             if (GUILayout.Button("Generate Button"))
             {
-                GameObject btn = Instantiate(nav_btn);
-                btn.GetComponentInChildren<TextMeshProUGUI>().text = btn_txt;
-                btn.name = "Button";
-                btn.transform.SetParent(Selection.activeTransform, false);
+                GenerateButton();
             }
 
         }
+    }
+
+    private void GenerateHeader()
+    {
+
+        TextMeshProUGUI hdr = Instantiate(header_prefab);
+        
+    }
+
+    private void GenerateButton()
+    {
+        GameObject btn = Instantiate(nav_btn);
+        btn.GetComponentInChildren<TextMeshProUGUI>().text = btn_txt;
+        btn.name = btn_txt.ToLower() + "_btn";
+        btn.transform.SetParent(Selection.activeTransform, false);
     }
 
     void GenerateCanvas()
@@ -111,7 +133,7 @@ public class TemplatePages : EditorWindow
         events.AddComponent<StandaloneInputModule>();
 
         // Generate Opening Slide
-        GameObject opening_panel = new GameObject("Panel0");
+        GameObject opening_panel = new GameObject("Panel_0");
         //opening_panel.tag = "panel";
         opening_panel.AddComponent<CanvasRenderer>();
 
@@ -134,7 +156,7 @@ public class TemplatePages : EditorWindow
     {
         // Create a Panel
         Navigation nav = new_canvas.GetComponent<Navigation>();
-        GameObject panel = new GameObject("Panel" + nav.panels.Count);
+        GameObject panel = new GameObject("Panel_" + nav.panels.Count);
               
         // Add the standard components to the new panel
         panel.AddComponent<CanvasRenderer>();

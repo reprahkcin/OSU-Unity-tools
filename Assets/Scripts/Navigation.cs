@@ -45,7 +45,7 @@ public class Navigation : MonoBehaviour
         panels.RemoveAll(GameObject => GameObject == null);
         foreach (GameObject item in panels)
         {
-            item.name = "Panel" + panels.IndexOf(item);
+            item.name = "Panel_" + panels.IndexOf(item);
         }
     }
 }
