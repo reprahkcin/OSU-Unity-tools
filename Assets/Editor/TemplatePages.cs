@@ -10,14 +10,8 @@ public class TemplatePages : EditorWindow
     //
     // Prefab stuff - under the hood
     //
-    public GameObject button_prefab;
-    //public GameObject backwards_prefab;
-    //public GameObject forwards_prefab;
     public TMP_FontAsset header_font;
     public TMP_FontAsset body_font;
-    private Navigation navigation;
-    public TextMeshProUGUI header_prefab;
-
 
     //
     // Default values
@@ -31,10 +25,8 @@ public class TemplatePages : EditorWindow
     // Placeholders
     //
     private GameObject new_canvas;
-    private string btn_txt;
     private string header_txt;
     private string body_txt;
-    private Sprite img;
 
 
     [MenuItem("Window/OSU Template Pages")]
@@ -63,8 +55,6 @@ public class TemplatePages : EditorWindow
 
     private void OnGUI()
     {
-        //GUIStyle marginTop = new GUIStyle();
-        //marginTop.margin = new RectOffset(0, 0, 0, 0);
 
         GUIStyle gstyle = new GUIStyle();
         gstyle.wordWrap = true;
@@ -142,62 +132,8 @@ public class TemplatePages : EditorWindow
             GenerateBody();
         }
 
-        HorizontalLine(Color.grey);
 
-
-        GUILayout.Label("Button Creator:", EditorStyles.boldLabel);
-        GUILayout.Label(
-            "Type the text you would like to appear on your button in the box below, select the parent panel in the hierarchy, then generate.",
-            gstyle);
-
-        btn_txt = EditorGUILayout.TextField(btn_txt);
-
-        if (GUILayout.Button("Generate Button"))
-        {
-            GenerateButton();
-        }
-
-        HorizontalLine(Color.grey);
-
-        GUILayout.Label("Generate Navigation:", EditorStyles.boldLabel);
-        GUILayout.Label(
-            "The button below will generate a panel that will overlay basic navigtion controls on your project",
-            gstyle);
-
-
-        //if (GUILayout.Button("Generate Navigation"))
-        //{
-        //    GenerateNavigation();
-        //}
     }
-
-
-
-    //private void GenerateNavigation()
-    //{
-    //    var nav_panel = new GameObject("navigation_panel");
-    //    nav_panel.AddComponent<CanvasRenderer>();
-    //    nav_panel.AddComponent<Image>();
-    //    nav_panel.GetComponent<Image>().color = new Color(0, 0, 0, 0);
-    //    nav_panel.GetComponent<Image>().raycastTarget = false;
-    //    nav_panel.GetComponent<RectTransform>().sizeDelta = new Vector2(width, height);
-    //    nav_panel.AddComponent<HorizontalLayoutGroup>();
-    //    nav_panel.GetComponent<HorizontalLayoutGroup>().childAlignment = TextAnchor.LowerCenter;
-    //    nav_panel.GetComponent<HorizontalLayoutGroup>().padding = new RectOffset(0, 0, 0, 15);
-    //    nav_panel.transform.SetParent(GameObject.Find("Canvas").transform, false);
-
-    //    var last_button = Instantiate(backwards_prefab);
-    //    last_button.name = "prev_btn";
-    //    last_button.GetComponentInChildren<TextMeshProUGUI>().text = "PREVIOUS";
-    //    last_button.GetComponentInChildren<TextMeshProUGUI>().font = header_font;
-    //    last_button.transform.SetParent(nav_panel.transform, true);
-
-    //    var next_button = Instantiate(forwards_prefab);
-    //    next_button.name = "next_btn";
-    //    next_button.GetComponentInChildren<TextMeshProUGUI>().text = "NEXT";
-    //    next_button.GetComponentInChildren<TextMeshProUGUI>().font = header_font;
-    //    next_button.transform.SetParent(nav_panel.transform, true);
-    //}
 
 
     private void GenerateHeader()
@@ -224,21 +160,6 @@ public class TemplatePages : EditorWindow
         bdy_txt.GetComponent<RectTransform>().sizeDelta = new Vector2(width, height);
         bdy_txt.GetComponent<TextMeshProUGUI>().alignment = TextAlignmentOptions.Left;
         bdy_txt.transform.SetParent(Selection.activeTransform, false);
-    }
-
-
-    private void GenerateButton()
-    {
-        GameObject btn = new GameObject();
-        btn.AddComponent<CanvasRenderer>();
-        btn.AddComponent<Image>();
-        btn.AddComponent<TextMeshProUGUI>();
-        btn.AddComponent<Button>();
-        btn.GetComponentInChildren<TextMeshProUGUI>().text = btn_txt;
-        btn.GetComponentInChildren<TextMeshProUGUI>().alignment = TextAlignmentOptions.Center;
-        btn.GetComponentInChildren<TextMeshProUGUI>().font = header_font;
-        btn.name = btn_txt.ToLower() + "_btn";
-        btn.transform.SetParent(Selection.activeTransform, false);
     }
 
     private void GenerateCanvas()
