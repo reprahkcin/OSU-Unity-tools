@@ -5,11 +5,7 @@ MonoImporter:
   serializedVersion: 2
   defaultReferences:
   - m_ViewDataDictionary: {instanceID: 0}
-  - button_prefab: {fileID: 6870300465907623608, guid: 0362ef6f9488d8d49aaed90be41fadce,
-      type: 3}
-  - backwards_prefab: {fileID: 1933718113454263126, guid: 1fd64140df5c3594ba6f861b49d3af64,
-      type: 3}
-  - forwards_prefab: {fileID: 296314980661240134, guid: a8b0b14cbbfe00f4dad18102b975b688,
+  - button_prefab: {fileID: 3228908969662374201, guid: f8e70b0e8a941d246870965b954e063c,
       type: 3}
   - header_font: {fileID: 11400000, guid: 57c359202ffa00d4587852522cfdd835, type: 2}
   - body_font: {fileID: 11400000, guid: 89795743e82d5f04b9b210f54abe5e00, type: 2}

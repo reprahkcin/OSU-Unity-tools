@@ -11,8 +11,8 @@ public class TemplatePages : EditorWindow
     // Prefab stuff - under the hood
     //
     public GameObject button_prefab;
-    public GameObject backwards_prefab;
-    public GameObject forwards_prefab;
+    //public GameObject backwards_prefab;
+    //public GameObject forwards_prefab;
     public TMP_FontAsset header_font;
     public TMP_FontAsset body_font;
     private Navigation navigation;
@@ -63,14 +63,14 @@ public class TemplatePages : EditorWindow
 
     private void OnGUI()
     {
-        GUIStyle marginTop = new GUIStyle();
-        marginTop.margin = new RectOffset(0, 0, 0, 0);
+        //GUIStyle marginTop = new GUIStyle();
+        //marginTop.margin = new RectOffset(0, 0, 0, 0);
 
         GUIStyle gstyle = new GUIStyle();
         gstyle.wordWrap = true;
         gstyle.padding = new RectOffset(10, 10, 0, 5);
 
-        GUILayout.Label("", marginTop);
+        GUILayout.Label("");
         GUILayout.Label("Project Colors:", EditorStyles.boldLabel);
         GUILayout.Label("Select the main colors for your project.", gstyle);
         bg_color = EditorGUILayout.ColorField("Background Color", bg_color);
@@ -78,21 +78,31 @@ public class TemplatePages : EditorWindow
 
         HorizontalLine(Color.grey);
 
-        GUILayout.Label("Generate Canvas:", EditorStyles.boldLabel);
-        GUILayout.Label("Get started by creating a canvas object. It will be created with a navigation script attached. Use those methods with any created buttons to control the slides.", gstyle);
-
-        width = EditorGUILayout.IntField("Width", width);
-        height = EditorGUILayout.IntField("Height", height);
-
-
-        if (GUILayout.Button("Generate Canvas"))
+        if (GameObject.Find("Canvas"))
         {
-            GenerateCanvas();
+
+        }
+        else
+        {
+            GUILayout.Label("Generate Canvas:", EditorStyles.boldLabel);
+            GUILayout.Label("Get started by creating a canvas object. It will be created with a navigation script attached. Use those methods with any created buttons to control the slides.", gstyle);
+
+            width = EditorGUILayout.IntField("Width", width);
+            height = EditorGUILayout.IntField("Height", height);
+
+
+            if (GUILayout.Button("Generate Canvas"))
+            {
+                GenerateCanvas();
+            }
+
+            HorizontalLine(Color.grey);
         }
 
 
-        HorizontalLine(Color.grey);
-        GUILayout.Label("", marginTop);
+
+
+        GUILayout.Label("");
 
         GUILayout.Label("Generate Panels:", EditorStyles.boldLabel);
         GUILayout.Label("Create as many panels as you would like. Run 'Panel Cleanup' function if you remove any along the way.", gstyle);
@@ -123,7 +133,7 @@ public class TemplatePages : EditorWindow
             GenerateHeader();
         }
 
-        GUILayout.Label("", marginTop);
+        GUILayout.Label("");
 
         body_txt = EditorGUILayout.TextArea(body_txt, GUILayout.Height(100));
 
@@ -155,39 +165,39 @@ public class TemplatePages : EditorWindow
             gstyle);
 
 
-        if (GUILayout.Button("Generate Navigation"))
-        {
-            GenerateNavigation();
-        }
+        //if (GUILayout.Button("Generate Navigation"))
+        //{
+        //    GenerateNavigation();
+        //}
     }
 
 
 
-    private void GenerateNavigation()
-    {
-        var nav_panel = new GameObject("navigation_panel");
-        nav_panel.AddComponent<CanvasRenderer>();
-        nav_panel.AddComponent<Image>();
-        nav_panel.GetComponent<Image>().color = new Color(0, 0, 0, 0);
-        nav_panel.GetComponent<Image>().raycastTarget = false;
-        nav_panel.GetComponent<RectTransform>().sizeDelta = new Vector2(width, height);
-        nav_panel.AddComponent<HorizontalLayoutGroup>();
-        nav_panel.GetComponent<HorizontalLayoutGroup>().childAlignment = TextAnchor.LowerCenter;
-        nav_panel.GetComponent<HorizontalLayoutGroup>().padding = new RectOffset(0, 0, 0, 15);
-        nav_panel.transform.SetParent(GameObject.Find("Canvas").transform, false);
+    //private void GenerateNavigation()
+    //{
+    //    var nav_panel = new GameObject("navigation_panel");
+    //    nav_panel.AddComponent<CanvasRenderer>();
+    //    nav_panel.AddComponent<Image>();
+    //    nav_panel.GetComponent<Image>().color = new Color(0, 0, 0, 0);
+    //    nav_panel.GetComponent<Image>().raycastTarget = false;
+    //    nav_panel.GetComponent<RectTransform>().sizeDelta = new Vector2(width, height);
+    //    nav_panel.AddComponent<HorizontalLayoutGroup>();
+    //    nav_panel.GetComponent<HorizontalLayoutGroup>().childAlignment = TextAnchor.LowerCenter;
+    //    nav_panel.GetComponent<HorizontalLayoutGroup>().padding = new RectOffset(0, 0, 0, 15);
+    //    nav_panel.transform.SetParent(GameObject.Find("Canvas").transform, false);
 
-        var last_button = Instantiate(backwards_prefab);
-        last_button.name = "prev_btn";
-        last_button.GetComponentInChildren<TextMeshProUGUI>().text = "PREVIOUS";
-        last_button.GetComponentInChildren<TextMeshProUGUI>().font = header_font;
-        last_button.transform.SetParent(nav_panel.transform, true);
+    //    var last_button = Instantiate(backwards_prefab);
+    //    last_button.name = "prev_btn";
+    //    last_button.GetComponentInChildren<TextMeshProUGUI>().text = "PREVIOUS";
+    //    last_button.GetComponentInChildren<TextMeshProUGUI>().font = header_font;
+    //    last_button.transform.SetParent(nav_panel.transform, true);
 
-        var next_button = Instantiate(forwards_prefab);
-        next_button.name = "next_btn";
-        next_button.GetComponentInChildren<TextMeshProUGUI>().text = "NEXT";
-        next_button.GetComponentInChildren<TextMeshProUGUI>().font = header_font;
-        next_button.transform.SetParent(nav_panel.transform, true);
-    }
+    //    var next_button = Instantiate(forwards_prefab);
+    //    next_button.name = "next_btn";
+    //    next_button.GetComponentInChildren<TextMeshProUGUI>().text = "NEXT";
+    //    next_button.GetComponentInChildren<TextMeshProUGUI>().font = header_font;
+    //    next_button.transform.SetParent(nav_panel.transform, true);
+    //}
 
 
     private void GenerateHeader()
@@ -219,8 +229,14 @@ public class TemplatePages : EditorWindow
 
     private void GenerateButton()
     {
-        var btn = Instantiate(button_prefab);
+        GameObject btn = new GameObject();
+        btn.AddComponent<CanvasRenderer>();
+        btn.AddComponent<Image>();
+        btn.AddComponent<TextMeshProUGUI>();
+        btn.AddComponent<Button>();
         btn.GetComponentInChildren<TextMeshProUGUI>().text = btn_txt;
+        btn.GetComponentInChildren<TextMeshProUGUI>().alignment = TextAlignmentOptions.Center;
+        btn.GetComponentInChildren<TextMeshProUGUI>().font = header_font;
         btn.name = btn_txt.ToLower() + "_btn";
         btn.transform.SetParent(Selection.activeTransform, false);
     }
