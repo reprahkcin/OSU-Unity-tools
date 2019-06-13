@@ -11,14 +11,14 @@ public class Navigation : MonoBehaviour
         SwapPanels(activePanel); // Starts off turning on visibility for whatever is at index "activeThing" 
     }
 
-    public void NextThing() // Call with Next Button
+    public void Forward() // Call with Next Button
     {
         activePanel++;
         if (activePanel > panels.Count) { activePanel = 0; } // If you're at the end of the array, it will cycle back to the beginning.
         SwapPanels(activePanel);
     }
 
-    public void LastThing() // Call with Previous Button
+    public void Backward() // Call with Previous Button
     {
         activePanel--;
         if (activePanel < 0) { activePanel = 0; } // If you're at the beginning of the array, you can't go back
@@ -45,7 +45,7 @@ public class Navigation : MonoBehaviour
         panels.RemoveAll(GameObject => GameObject == null);
         foreach (GameObject item in panels)
         {
-            item.name = "Panel_" + panels.IndexOf(item);
+            item.name = "panel_" + panels.IndexOf(item);
         }
     }
 }
