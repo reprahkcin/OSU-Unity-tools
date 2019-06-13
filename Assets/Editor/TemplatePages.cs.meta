@@ -5,16 +5,15 @@ MonoImporter:
   serializedVersion: 2
   defaultReferences:
   - m_ViewDataDictionary: {instanceID: 0}
-  - nav_btn: {fileID: 6870300465907623608, guid: 0362ef6f9488d8d49aaed90be41fadce,
+  - button_prefab: {fileID: 6870300465907623608, guid: 0362ef6f9488d8d49aaed90be41fadce,
       type: 3}
-  - next_btn: {fileID: 884532057223312777, guid: a8b0b14cbbfe00f4dad18102b975b688,
+  - backwards_prefab: {fileID: 1933718113454263126, guid: 1fd64140df5c3594ba6f861b49d3af64,
       type: 3}
-  - last_btn: {fileID: 1933718113454263126, guid: 1fd64140df5c3594ba6f861b49d3af64,
+  - forwards_prefab: {fileID: 296314980661240134, guid: a8b0b14cbbfe00f4dad18102b975b688,
       type: 3}
   - header_font: {fileID: 11400000, guid: 57c359202ffa00d4587852522cfdd835, type: 2}
   - body_font: {fileID: 11400000, guid: 89795743e82d5f04b9b210f54abe5e00, type: 2}
-  - header_prefab: {fileID: 8548168592720482996, guid: 1d478490d2e5541449d1f2a2a3dd171c,
-      type: 3}
+  - header_prefab: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

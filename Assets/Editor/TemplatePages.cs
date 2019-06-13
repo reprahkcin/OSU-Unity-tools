@@ -15,11 +15,9 @@ public class TemplatePages : EditorWindow
     public GameObject forwards_prefab;
     public TMP_FontAsset header_font;
     public TMP_FontAsset body_font;
-<<<<<<< HEAD
     private Navigation navigation;
-=======
     public TextMeshProUGUI header_prefab;
->>>>>>> parent of 328a5cc... everything works, with basic instructions
+
 
     //
     // Default values
@@ -39,10 +37,6 @@ public class TemplatePages : EditorWindow
     private Sprite img;
 
 
-<<<<<<< HEAD
-=======
-
->>>>>>> parent of 328a5cc... everything works, with basic instructions
     [MenuItem("Window/OSU Template Pages")]
     public static void ShowWindow()
     {
@@ -50,7 +44,6 @@ public class TemplatePages : EditorWindow
     }
 
 
-<<<<<<< HEAD
     //
     // Horizontal Line setup
     //
@@ -62,7 +55,7 @@ public class TemplatePages : EditorWindow
         horizontalLine.normal.background = EditorGUIUtility.whiteTexture;
         horizontalLine.margin = new RectOffset(0, 0, 25, 25);
         horizontalLine.fixedHeight = 4;
-        var c = GUI.color;
+        Color c = GUI.color;
         GUI.color = color;
         GUILayout.Box(GUIContent.none, horizontalLine);
         GUI.color = c;
@@ -70,134 +63,106 @@ public class TemplatePages : EditorWindow
 
     private void OnGUI()
     {
-        var marginTop = new GUIStyle();
+        GUIStyle marginTop = new GUIStyle();
         marginTop.margin = new RectOffset(0, 0, 0, 0);
 
-        var gstyle = new GUIStyle();
+        GUIStyle gstyle = new GUIStyle();
         gstyle.wordWrap = true;
         gstyle.padding = new RectOffset(10, 10, 0, 5);
 
         GUILayout.Label("", marginTop);
         GUILayout.Label("Project Colors:", EditorStyles.boldLabel);
         GUILayout.Label("Select the main colors for your project.", gstyle);
-=======
-    void OnGUI()
-    {
-        
-        GUILayout.Label("Canvas Reference Dimensions:", EditorStyles.boldLabel);
-        width = EditorGUILayout.IntField("Width", width);
-        height = EditorGUILayout.IntField("Height", height);
->>>>>>> parent of 328a5cc... everything works, with basic instructions
-
-        GUILayout.Label("Set Colors:", EditorStyles.boldLabel);
         bg_color = EditorGUILayout.ColorField("Background Color", bg_color);
         text_color = EditorGUILayout.ColorField("Text Color", text_color);
 
+        HorizontalLine(Color.grey);
+
+        GUILayout.Label("Generate Canvas:", EditorStyles.boldLabel);
+        GUILayout.Label("Get started by creating a canvas object. It will be created with a navigation script attached. Use those methods with any created buttons to control the slides.", gstyle);
+
+        width = EditorGUILayout.IntField("Width", width);
+        height = EditorGUILayout.IntField("Height", height);
+
+
         if (GUILayout.Button("Generate Canvas"))
         {
-<<<<<<< HEAD
-        }
-        else
-        {
-            GUILayout.Label("Generate Canvas:", EditorStyles.boldLabel);
-            GUILayout.Label(
-                "Get started by creating a canvas object. It will be created with a navigation script attached. Use those methods with any created buttons to control the slides.",
-                gstyle);
-=======
             GenerateCanvas();
         }
 
-        if (GameObject.Find("Canvas"))
+
+        HorizontalLine(Color.grey);
+        GUILayout.Label("", marginTop);
+
+        GUILayout.Label("Generate Panels:", EditorStyles.boldLabel);
+        GUILayout.Label("Create as many panels as you would like. Run 'Panel Cleanup' function if you remove any along the way.", gstyle);
+
+        if (GUILayout.Button("Generate Panel")) GeneratePanel();
+
+
+        if (GUILayout.Button("Panel Cleanup"))
         {
-            //GUILayout.Label("Prefabs:", EditorStyles.boldLabel);
-            //nav_btn = EditorGUILayout.ObjectField("button", nav_btn, typeof(GameObject), true) as GameObject;
->>>>>>> parent of 328a5cc... everything works, with basic instructions
-
-
-<<<<<<< HEAD
-            if (GUILayout.Button("Generate Canvas")) GenerateCanvas();
+            if (new_canvas != null)
+            {
+                var nav = new_canvas.GetComponent<Navigation>();
+                nav.ListCleanup();
+            }
         }
 
+        HorizontalLine(Color.grey);
 
-        if (GameObject.Find("Canvas"))
+        GUILayout.Label("Formatted Text Components:", EditorStyles.boldLabel);
+        GUILayout.Label(
+            "Use this portion of the utility to generate text objects with the pre-determined styling. Make sure to select the parent object in the hierarchy before generating.",
+            gstyle);
+
+        header_txt = EditorGUILayout.TextField("Header Text", header_txt);
+
+        if (GUILayout.Button("Generate Header Text"))
         {
-            GUILayout.Label("Generate Panels:", EditorStyles.boldLabel);
-            GUILayout.Label(
-                "Create as many panels as you would like. Run 'Panel Cleanup' function if you remove any along the way.",
-                gstyle);
+            GenerateHeader();
+        }
 
-            if (GUILayout.Button("Generate Panel")) GeneratePanel();
-=======
-            GUILayout.Label("Basic Elements:", EditorStyles.boldLabel);
-            header_txt = EditorGUILayout.TextField("Header Text", "");
-            if (GUILayout.Button("Generate Header"))
-            {
-                GenerateHeader();
-            }
+        GUILayout.Label("", marginTop);
 
-            body_txt = EditorGUILayout.TextField("Body Text", "");
-            img = EditorGUILayout.ObjectField("Image", img, typeof(Sprite), true) as Sprite;
+        body_txt = EditorGUILayout.TextArea(body_txt, GUILayout.Height(100));
 
-            if (GUILayout.Button("Generate Panel"))
-            {
-                GeneratePanel();
-            }
+        if (GUILayout.Button("Generate Body Text"))
+        {
+            GenerateBody();
+        }
 
->>>>>>> parent of 328a5cc... everything works, with basic instructions
-            if (GUILayout.Button("Panel Cleanup"))
-                if (new_canvas != null)
-                {
-                    var nav = new_canvas.GetComponent<Navigation>();
-                    nav.ListCleanup();
-                }
-
-<<<<<<< HEAD
-            HorizontalLine(Color.grey);
-
-            GUILayout.Label("Formatted Text Components:", EditorStyles.boldLabel);
-            GUILayout.Label(
-                "Use this portion of the utility to generate text objects with the pre-determined styling. Make sure to select the parent object in the hierarchy before generating.",
-                gstyle);
-
-            header_txt = EditorGUILayout.TextField("Header Text", header_txt);
-            if (GUILayout.Button("Generate Header Text")) GenerateHeader();
-            GUILayout.Label("", marginTop);
-            body_txt = EditorGUILayout.TextArea(body_txt, GUILayout.Height(100));
-            if (GUILayout.Button("Generate Body Text")) GenerateBody();
-            HorizontalLine(Color.grey);
+        HorizontalLine(Color.grey);
 
 
-            GUILayout.Label("Button Creator:", EditorStyles.boldLabel);
-            GUILayout.Label(
-                "Type the text you would like to appear on your button in the box below, select the parent panel in the hierarchy, then generate.",
-                gstyle);
+        GUILayout.Label("Button Creator:", EditorStyles.boldLabel);
+        GUILayout.Label(
+            "Type the text you would like to appear on your button in the box below, select the parent panel in the hierarchy, then generate.",
+            gstyle);
 
-            btn_txt = EditorGUILayout.TextField(btn_txt);
+        btn_txt = EditorGUILayout.TextField(btn_txt);
 
-            if (GUILayout.Button("Generate Button")) GenerateButton();
+        if (GUILayout.Button("Generate Button"))
+        {
+            GenerateButton();
+        }
 
-            HorizontalLine(Color.grey);
+        HorizontalLine(Color.grey);
 
-            GUILayout.Label("Generate Navigation:", EditorStyles.boldLabel);
-            GUILayout.Label(
-                "The button below will generate a panel that will overlay basic navigtion controls on your project",
-                gstyle);
-=======
-            GUILayout.Label("Button Creator:", EditorStyles.boldLabel);
-            GUILayout.Label("(Select panel first)");
-            btn_txt = EditorGUILayout.TextField(btn_txt);
+        GUILayout.Label("Generate Navigation:", EditorStyles.boldLabel);
+        GUILayout.Label(
+            "The button below will generate a panel that will overlay basic navigtion controls on your project",
+            gstyle);
 
-            if (GUILayout.Button("Generate Button"))
-            {
-                GenerateButton();
-            }
->>>>>>> parent of 328a5cc... everything works, with basic instructions
 
-            if (GUILayout.Button("Generate Navigation")) GenerateNavigation();
+        if (GUILayout.Button("Generate Navigation"))
+        {
+            GenerateNavigation();
         }
     }
 
-<<<<<<< HEAD
+
+
     private void GenerateNavigation()
     {
         var nav_panel = new GameObject("navigation_panel");
@@ -249,14 +214,8 @@ public class TemplatePages : EditorWindow
         bdy_txt.GetComponent<RectTransform>().sizeDelta = new Vector2(width, height);
         bdy_txt.GetComponent<TextMeshProUGUI>().alignment = TextAlignmentOptions.Left;
         bdy_txt.transform.SetParent(Selection.activeTransform, false);
-=======
-    private void GenerateHeader()
-    {
-
-        TextMeshProUGUI hdr = Instantiate(header_prefab);
-        
->>>>>>> parent of 328a5cc... everything works, with basic instructions
     }
+
 
     private void GenerateButton()
     {
@@ -307,7 +266,7 @@ public class TemplatePages : EditorWindow
     {
         // Create a Panel
         var nav = new_canvas.GetComponent<Navigation>();
-        var panel = new GameObject("Panel_" + nav.panels.Count);
+        var panel = new GameObject("panel_" + nav.panels.Count);
 
         // Add the standard components to the new panel
         panel.AddComponent<CanvasRenderer>();
