@@ -3,10 +3,12 @@ using System;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class MultipleChoice : EditorWindow
 {
     private String question;
+    private String panelName = "mc_panel";
 
     private String answer_c1;
     private String answer_i1;
@@ -18,7 +20,8 @@ public class MultipleChoice : EditorWindow
 
     private GUIStyle horizontalLine;
     private GUIStyle OSUTools;
-
+    private int width = 1024;
+    private int height = 768;
     private void HorizontalLine(Color color)
     {
         horizontalLine = new GUIStyle();
@@ -41,6 +44,9 @@ public class MultipleChoice : EditorWindow
     private void OnGUI()
     {
 
+        width = EditorGUILayout.IntField("Width", width);
+        height = EditorGUILayout.IntField("Height", height);
+
         GUILayout.Label("1. Enter the question");
         question = GUILayout.TextArea(question, 200);
         HorizontalLine(Color.grey);
@@ -55,23 +61,56 @@ public class MultipleChoice : EditorWindow
 
         if (GUILayout.Button("Generate Quiz"))
         {
-            GenerateQuiz();
+            GenerateQuizPanel(width, height);
+            GenerateAnswerPanel(width,height,"answer");
         }
 
     }
-
-    void GenerateQuiz()
+    void GenerateQuizPanel(int width, int height)
     {
         GameObject mcQuizPanel = new GameObject();
         mcQuizPanel.AddComponent<RectTransform>();
+        mcQuizPanel.GetComponent<RectTransform>().sizeDelta = new Vector2(width, height);
         mcQuizPanel.AddComponent<CanvasRenderer>();
         mcQuizPanel.AddComponent<Image>();
-
+        mcQuizPanel.GetComponent<Image>().color = new Color(255, 255, 255, 0);
+        mcQuizPanel.AddComponent<VerticalLayoutGroup>();
+        mcQuizPanel.transform.SetParent(Selection.activeTransform.transform, false);
+    }
+    void GenerateAnswerPanel(int width, int height, string name)
+    {
+        GameObject aPanel = new GameObject();
+        aPanel.AddComponent<RectTransform>();
+        aPanel.GetComponent<RectTransform>().sizeDelta = new Vector2(width/2,height/4);
+        aPanel.AddComponent<CanvasRenderer>();
+        aPanel.name = name;
     }
 
-    void GenerateTextBoxes()
-    {
 
+
+    void GenerateButton(string label)
+    {
+        GameObject btn = Resources.Load("orange_btn") as GameObject;
+        GameObject b = Instantiate(btn);
+        b.GetComponentInChildren<TextMeshProUGUI>().text = label;
+        b.name = label.ToLower() + "_btn";
+        //b.transform.SetParent(GameObject.Find("working").transform, false);
+    }
+
+
+
+    void GenerateTextBoxes(string text, int answerNumber)
+    {
+        TMP_FontAsset font = Resources.Load("Kievit-Medium") as TMP_FontAsset;
+        GameObject txt = new GameObject("answer_" + answerNumber);
+        txt.AddComponent<RectTransform>();
+        txt.GetComponent<RectTransform>().sizeDelta = new Vector2(width/2,height/4);
+        txt.AddComponent<CanvasRenderer>();
+        txt.AddComponent<TextMeshProUGUI>();
+        txt.GetComponent<TextMeshProUGUI>().text = text;
+        txt.GetComponent<TextMeshProUGUI>().font = font;
+        txt.GetComponent<TextMeshProUGUI>().alignment = TextAlignmentOptions.Left;
+        //txt.transform.SetParent(GameObject.Find("working").transform, false);
     }
 
     void GenerateButtons()
