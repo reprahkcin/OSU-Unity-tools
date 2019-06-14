@@ -62,6 +62,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Resources\MultipleChoice\MCAnswer.cs" />
+    <Compile Include="Assets\Resources\MultipleChoice\MCQuestion.cs" />
+    <Compile Include="Assets\Resources\MultipleChoice\MCSet.cs" />
     <Compile Include="Assets\Scripts\Navigation.cs" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF-Surface-Mobile.shader" />
     <None Include="Assets\TextMesh Pro\Resources\LineBreaking Leading Characters.txt" />
