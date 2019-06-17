@@ -8,13 +8,13 @@ using Random = UnityEngine.Random;
 
 public class MultipleChoice : EditorWindow
 {
-    private String question;
+    private string question;
 
 
-    private String answer_c1;
-    private String answer_i1;
-    private String answer_i2;
-    private String answer_i3;
+    private string answer_c1;
+    private string answer_i1;
+    private string answer_i2;
+    private string answer_i3;
 
     private GUIStyle horizontalLine;
     private int width = 1024;
@@ -95,8 +95,8 @@ public class MultipleChoice : EditorWindow
         btn_pos = new Vector3(-11, 11, 0);
         que_btn_pos = new Vector3(11,11,0);
         txt_pos = new Vector3(11,-11,0);
-        String btn_txt = "SUBMIT";
-        String back_btn_txt = "REVIEW";
+        string btn_txt = "SUBMIT";
+        string back_btn_txt = "REVIEW";
         string[] answers = new string[4];
         answers = Shuffle();
         answerPanelColor = new Color32(37,37,37,50);
