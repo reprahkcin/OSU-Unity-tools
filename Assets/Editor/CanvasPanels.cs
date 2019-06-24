@@ -54,8 +54,16 @@ public class CanvasPanels : EditorWindow
         GUI.color = c;
     }
 
+    private Vector2 scrollPos = new Vector2();
+
     private void OnGUI()
     {
+
+        GUILayout.BeginArea(new Rect(0,0,EditorGUIUtility.currentViewWidth,position.height));
+        GUILayout.BeginVertical();
+
+        scrollPos = GUILayout.BeginScrollView(scrollPos, false, true);
+
         OSUTools = new GUIStyle();
 
         GUIStyle gstyle = new GUIStyle();
@@ -130,6 +138,12 @@ public class CanvasPanels : EditorWindow
             GenerateBody();
         }
 
+
+        //the code of the editor panel
+
+        GUILayout.EndScrollView();
+        GUILayout.EndVertical();
+        GUILayout.EndArea();
 
     }
 

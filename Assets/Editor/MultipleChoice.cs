@@ -8,6 +8,7 @@ using Random = UnityEngine.Random;
 
 public class MultipleChoice : EditorWindow
 {
+    private Vector2 scrollPos = new Vector2();
     private string question;
 
 
@@ -47,6 +48,12 @@ public class MultipleChoice : EditorWindow
 
     private void OnGUI()
     {
+        GUILayout.BeginArea(new Rect(0, 0, EditorGUIUtility.currentViewWidth, position.height));
+        GUILayout.BeginVertical();
+
+        scrollPos = GUILayout.BeginScrollView(scrollPos, false, true);
+
+
 
         width = EditorGUILayout.IntField("Width", width);
         height = EditorGUILayout.IntField("Height", height);
@@ -67,6 +74,10 @@ public class MultipleChoice : EditorWindow
         {
             GenerateQuizPanel(width, height);
         }
+
+        GUILayout.EndScrollView();
+        GUILayout.EndVertical();
+        GUILayout.EndArea();
 
     }
 
@@ -149,8 +160,6 @@ public class MultipleChoice : EditorWindow
         q_text.GetComponent<RectTransform>().anchorMin = new Vector2(0, 0.5f);
         q_text.GetComponent<RectTransform>().anchorMax = new Vector2(0, 0.5f);
         q_text.GetComponent<RectTransform>().pivot = new Vector2(0, 0.5f);
-
-
 
 
         GameObject panel1 = GenerateAnswerPanel(width, height, "answerPanel_1");
