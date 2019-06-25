@@ -10,10 +10,8 @@ public class MCAnswer
     }
     public MCAnswer(string value, bool isCorrect, string reason)
     {
-        value = this.value;
-        isCorrect = this.isCorrect;
-        reason = this.reason;
+        this.value = value;
+        this.isCorrect = isCorrect;
+        this.reason = reason;
     }
-
-
 }
