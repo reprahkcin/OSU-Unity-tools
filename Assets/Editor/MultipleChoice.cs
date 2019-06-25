@@ -1,10 +1,7 @@
-﻿
-using System;
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using Random = UnityEngine.Random;
 
 public class MultipleChoice : EditorWindow
 {
@@ -52,6 +49,8 @@ public class MultipleChoice : EditorWindow
     private string reason4 = defaultReason;
     private bool isCorrect4;
 
+    private MCAnswer[] answers;
+
 
 
     [MenuItem("Window/OSU Tools/Multiple Choice Question Builder")]
@@ -68,7 +67,6 @@ public class MultipleChoice : EditorWindow
 
         scrollPos = GUILayout.BeginScrollView(scrollPos, false, true);
 
-
         // Set Dimensions of Canvas
         width = EditorGUILayout.IntField("Width", width); 
         height = EditorGUILayout.IntField("Height", height);
@@ -84,7 +82,7 @@ public class MultipleChoice : EditorWindow
         answer1 = GUILayout.TextArea(answer1, 50);
         GUILayout.Label("Enter a reason");
         reason1 = GUILayout.TextArea(reason1, 50);
-        isCorrect1 = GUILayout.Toggle(true,"is Correct");
+        isCorrect1 = GUILayout.Toggle(isCorrect1,"is Correct");
 
         HorizontalLine(Color.grey);
 
@@ -92,7 +90,7 @@ public class MultipleChoice : EditorWindow
         answer2 = GUILayout.TextArea(answer2, 50);
         GUILayout.Label("Enter a reason");
         reason2 = GUILayout.TextArea(reason2, 50);
-        isCorrect2 = GUILayout.Toggle(true, "is Correct");
+        isCorrect2 = GUILayout.Toggle(isCorrect2, "is Correct");
 
         HorizontalLine(Color.grey);
 
@@ -100,7 +98,7 @@ public class MultipleChoice : EditorWindow
         answer3 = GUILayout.TextArea(answer3, 50);
         GUILayout.Label("Enter a reason");
         reason3 = GUILayout.TextArea(reason3, 50);
-        isCorrect3 = GUILayout.Toggle(true, "is Correct");
+        isCorrect3 = GUILayout.Toggle(isCorrect3, "is Correct");
 
         HorizontalLine(Color.grey);
 
@@ -108,19 +106,16 @@ public class MultipleChoice : EditorWindow
         answer4 = GUILayout.TextArea(answer4, 50);
         GUILayout.Label("Enter a reason");
         reason4 = GUILayout.TextArea(reason4, 50);
-        isCorrect4 = GUILayout.Toggle(true, "is Correct");
+        isCorrect4 = GUILayout.Toggle(isCorrect4, "is Correct");
 
         if (GUILayout.Button("Generate Quiz"))
         {
             CreateAnswerObjects();
-            MCAnswer[] shuffled = Shuffle();
-            
             CreateMainPanel();
             CreateQuestionPanel();
+            CreateQuestion();
             CreateAnswerGroupPanel();
-            CreateAnswers(shuffled);
-
-
+            CreateAnswers(answers);
 
         }
 
@@ -132,144 +127,158 @@ public class MultipleChoice : EditorWindow
 
     void CreateAnswerObjects()
     {
+        answers = new MCAnswer[4];
         var a1 = new MCAnswer(answer1, isCorrect1, reason1);
         var a2 = new MCAnswer(answer2, isCorrect2, reason2);
         var a3 = new MCAnswer(answer3, isCorrect3, reason3);
         var a4 = new MCAnswer(answer4, isCorrect4, reason4);
-    }
-
-    // Shuffle method to randomize order of answers
-    MCAnswer[] Shuffle()
-    {
-        MCAnswer[] answers = new MCAnswer[4];
         answers[0] = a1;
         answers[1] = a2;
         answers[2] = a3;
         answers[3] = a4;
-
-        for (int t = 0; t < answers.Length; t++)
-        {
-            MCAnswer tmp = answers[t];
-            int r = Random.Range(t, answers.Length);
-            answers[t] = answers[r];
-            answers[r] = tmp;
-        }
-
-        return answers;
     }
+
+
 
     void CreateMainPanel()
     {
         mainPanel = new GameObject("MCQuestionSet");
-        mainPanel.AddComponent<RectTransform>();
-        mainPanel.GetComponent<RectTransform>().sizeDelta = new Vector2(width, height);
-        mainPanel.GetComponent<RectTransform>().anchorMin = new Vector2(0.5f,0.5f);
-        mainPanel.GetComponent<RectTransform>().anchorMax = new Vector2(0.5f,0.5f);
-        mainPanel.GetComponent<RectTransform>().pivot = new Vector2(0.5f,0.5f);
+        RectTransform rectTrans = mainPanel.AddComponent<RectTransform>();
+        rectTrans.sizeDelta = new Vector2(width, height);
+        rectTrans.anchorMin = new Vector2(0.5f,0.5f);
+        rectTrans.anchorMax = new Vector2(0.5f,0.5f);
+        rectTrans.pivot = new Vector2(0.5f,0.5f);
         mainPanel.AddComponent<CanvasRenderer>();
-        mainPanel.AddComponent<Image>();
-        mainPanel.GetComponent<Image>().color = new Color(255,255,255,0);
+        Image img = mainPanel.AddComponent<Image>();
+        img.color = new Color(255,255,255,0);
         mainPanel.transform.SetParent(Selection.activeTransform, false);
+        MCLogic scr = mainPanel.AddComponent<MCLogic>();
+        scr.MCBank = answers;
+        scr.question = question;
+        scr.bodyFont = Resources.Load("Kievit-Medium") as TMP_FontAsset;
+        scr.btnFont = Resources.Load("Stratum-Bold") as TMP_FontAsset;
+        scr.defaultBtn = Resources.Load("orange_btn") as GameObject;
+        scr.height = height;
+        scr.width = width;
     }
 
     void CreateQuestionPanel()
     {
         GameObject mcQuestionPanel = new GameObject("mc_questionPanel");
-        mcQuestionPanel.AddComponent<RectTransform>();
-        mcQuestionPanel.GetComponent<RectTransform>().sizeDelta = new Vector2(width / 2, height);
+        RectTransform rect = mcQuestionPanel.AddComponent<RectTransform>();
+        rect.anchorMin = new Vector2(0, 0.5f);
+        rect.anchorMax = new Vector2(0, 0.5f);
+        rect.pivot = new Vector2(0, 0.5f);
+        rect.sizeDelta = new Vector2(width / 2, height);
         mcQuestionPanel.AddComponent<CanvasRenderer>();
-        mcQuestionPanel.AddComponent<Image>();
-        mcQuestionPanel.GetComponent<Image>().color = new Color(255, 255, 255, 0);
-        mcQuestionPanel.AddComponent<VerticalLayoutGroup>();
-        mcQuestionPanel.GetComponent<VerticalLayoutGroup>().childAlignment = TextAnchor.LowerLeft;
-        mcQuestionPanel.GetComponent<VerticalLayoutGroup>().padding = new RectOffset(width / 64, width / 128, height / 48, height / 48);
-        mcQuestionPanel.GetComponent<VerticalLayoutGroup>().spacing = height / 48;
-        mcQuestionPanel.GetComponent<VerticalLayoutGroup>().childControlHeight = true;
-        mcQuestionPanel.GetComponent<VerticalLayoutGroup>().childControlWidth = true;
-        mcQuestionPanel.transform.SetParent(Selection.activeTransform.transform, false);
-        mcQuestionPanel.GetComponent<RectTransform>().anchorMin = new Vector2(0, 0.5f);
-        mcQuestionPanel.GetComponent<RectTransform>().anchorMax = new Vector2(0, 0.5f);
-        mcQuestionPanel.GetComponent<RectTransform>().pivot = new Vector2(0, 0.5f);
-        mcQuestionPanel.transform.SetParent(mainPanel.transform);
+        Image img = mcQuestionPanel.AddComponent<Image>();
+        img.color = new Color(255, 255, 255, 0);
+        VerticalLayoutGroup vert = mcQuestionPanel.AddComponent<VerticalLayoutGroup>();
+        vert.childAlignment = TextAnchor.LowerLeft;
+        vert.padding = new RectOffset(width / 64, width / 128, height / 48, height / 48);
+        vert.spacing = height / 48;
+        vert.childControlHeight = true;
+        vert.childControlWidth = true;
+        mcQuestionPanel.transform.SetParent(mainPanel.transform, false);
     }
 
+    void CreateQuestion()
+    {
+        TMP_FontAsset font = Resources.Load("Kievit-Medium") as TMP_FontAsset;
+        GameObject question = new GameObject("question");
+        question.transform.SetParent(GameObject.Find("mc_questionPanel").transform, false);
+        RectTransform rect = question.AddComponent<RectTransform>();
+        rect.anchorMin = new Vector2(0.5f,0.5f);
+        rect.anchorMax = new Vector2(0.5f,0.5f);
+        rect.pivot = new Vector2(0.5f,0.5f);
+        question.AddComponent<CanvasRenderer>();
+        TextMeshProUGUI txt = question.AddComponent<TextMeshProUGUI>();
+        txt.font = font;
+        txt.fontSize = 36;
+        txt.alignment = TextAlignmentOptions.Center;
+        txt.text = this.question;
+
+
+    }
 
     void CreateAnswerGroupPanel()
     {
         GameObject mcAnswerPanel = new GameObject("mc_answerPanel");
-        mcAnswerPanel.AddComponent<RectTransform>();
-        mcAnswerPanel.GetComponent<RectTransform>().sizeDelta = new Vector2(width / 2, height);
+        RectTransform rect = mcAnswerPanel.AddComponent<RectTransform>();
+        rect.sizeDelta = new Vector2(width / 2, height);
+        rect.anchorMin = new Vector2(1, 0.5f);
+        rect.anchorMax = new Vector2(1, 0.5f);
+        rect.pivot = new Vector2(1, 0.5f);
         mcAnswerPanel.AddComponent<CanvasRenderer>();
-        mcAnswerPanel.AddComponent<Image>();
-        mcAnswerPanel.GetComponent<Image>().color = new Color(255, 255, 255, 0);
-        mcAnswerPanel.AddComponent<VerticalLayoutGroup>();
-        mcAnswerPanel.GetComponent<VerticalLayoutGroup>().childAlignment = TextAnchor.UpperRight;
-        mcAnswerPanel.GetComponent<VerticalLayoutGroup>().padding = new RectOffset(width / 128, width / 64, height / 48, height / 48);
-        mcAnswerPanel.GetComponent<VerticalLayoutGroup>().spacing = height / 48;
-        mcAnswerPanel.GetComponent<VerticalLayoutGroup>().childControlHeight = true;
-        mcAnswerPanel.GetComponent<VerticalLayoutGroup>().childControlWidth = true;
-        mcAnswerPanel.transform.SetParent(Selection.activeTransform.transform, false);
-        mcAnswerPanel.GetComponent<RectTransform>().anchorMin = new Vector2(1, 0.5f);
-        mcAnswerPanel.GetComponent<RectTransform>().anchorMax = new Vector2(1, 0.5f);
-        mcAnswerPanel.GetComponent<RectTransform>().pivot = new Vector2(1, 0.5f);
-        mcAnswerPanel.transform.SetParent(mainPanel.transform);
+        Image img = mcAnswerPanel.AddComponent<Image>();
+        img.color = new Color(255, 255, 255, 0);
+        VerticalLayoutGroup vert = mcAnswerPanel.AddComponent<VerticalLayoutGroup>();
+        vert.childAlignment = TextAnchor.UpperRight;
+        vert.padding = new RectOffset(width / 128, width / 64, height / 48, height / 48);
+        vert.spacing = height / 48;
+        vert.childControlHeight = true;
+        vert.childControlWidth = true;
+        mcAnswerPanel.transform.SetParent(mainPanel.transform,false);
     }
 
-    GameObject GenerateAnswerPanel(string name)
+    GameObject CreateAnswerPanel(string name)
     {
-        GameObject aPanel = new GameObject();
-        aPanel.AddComponent<RectTransform>();
-        aPanel.GetComponent<RectTransform>().sizeDelta = new Vector2(width / 2, height / 4);
+        GameObject aPanel = new GameObject(name);
+        RectTransform rect = aPanel.AddComponent<RectTransform>();
+        rect.sizeDelta = new Vector2(width / 2, height / 4);
         aPanel.AddComponent<CanvasRenderer>();
-        aPanel.AddComponent<Image>();
-        aPanel.GetComponent<Image>().color = answerPanelColor;
-        aPanel.name = name;
+        Image img = aPanel.AddComponent<Image>();
+        img.color = answerPanelColor;
         return aPanel;
     }
 
-    GameObject GenerateButton(string label, Vector3 pos)
+    GameObject CreateButton(string label, Vector3 pos)
     {
         GameObject btn = Resources.Load("orange_btn") as GameObject;
         GameObject b = Instantiate(btn, pos, q);
         b.GetComponentInChildren<TextMeshProUGUI>().text = label;
         b.name = label.ToLower() + "_btn";
-
         return b;
     }
 
-    GameObject GenerateTextBoxes(string text, int answerNumber)
+
+
+    public GameObject CreateTextBoxes(string text)
     {
         TMP_FontAsset font = Resources.Load("Kievit-Medium") as TMP_FontAsset;
-        GameObject txt = new GameObject("answer_" + answerNumber);
-        txt.AddComponent<RectTransform>();
-        txt.GetComponent<RectTransform>().sizeDelta = new Vector2(width / 2, height / 4);
+        GameObject txt = new GameObject("answer");
+        RectTransform rect = txt.AddComponent<RectTransform>();
+        rect.sizeDelta = new Vector2(width/2,height/4);
+        rect.anchorMin = new Vector2(0.5f, 0.5f);
+        rect.anchorMax = new Vector2(0.5f, 0.5f);
+        rect.pivot = new Vector2(0.5f, 0.5f);
         txt.AddComponent<CanvasRenderer>();
-        txt.AddComponent<TextMeshProUGUI>();
-        txt.GetComponent<TextMeshProUGUI>().text = text;
-        txt.GetComponent<TextMeshProUGUI>().font = font;
-        txt.GetComponent<TextMeshProUGUI>().alignment = TextAlignmentOptions.Center;
-        txt.GetComponent<RectTransform>().anchorMin = new Vector2(0.5f, 0.5f);
-        txt.GetComponent<RectTransform>().anchorMax = new Vector2(0.5f, 0.5f);
-        txt.GetComponent<RectTransform>().pivot = new Vector2(0.5f, 0.5f);
+        TextMeshProUGUI tmp = txt.AddComponent<TextMeshProUGUI>();
+        tmp.text = text;
+        tmp.font = font;
+        tmp.alignment = TextAlignmentOptions.Center;
+
         return txt;
     }
 
-    void CreateAnswers(MCAnswer[] shuffledAnswers)
+
+
+    void CreateAnswers(MCAnswer[] Answers)
     {
-        foreach (MCAnswer shuffledAnswer in shuffledAnswers)
+        for (int i = 0; i < Answers.Length; i++)
         {
-            GameObject panel = GenerateAnswerPanel("response_" + Convert.ToString(Array.IndexOf(shuffledAnswers,shuffledAnswer)));
-            panel.transform.SetParent(GameObject.Find("mc_answerPanel").transform,false);
-            GameObject ans_btn1 = GenerateButton(btn_txt, btn_pos);
-            ans_btn1.transform.SetParent(panel.transform, false);
-            ans_btn1.GetComponent<RectTransform>().anchorMin = new Vector2(1, 0);
-            ans_btn1.GetComponent<RectTransform>().anchorMax = new Vector2(1, 0);
-            ans_btn1.GetComponent<RectTransform>().pivot = new Vector2(1, 0);
-            GameObject ans_txt1 = GenerateTextBoxes(shuffledAnswer.value, Array.IndexOf(shuffledAnswers, shuffledAnswer) + 1);
-            ans_txt1.transform.SetParent(panel.transform, false);
-            ans_txt1.GetComponent<RectTransform>().anchorMin = new Vector2(0.5f, 0.65f);
-            ans_txt1.GetComponent<RectTransform>().anchorMax = new Vector2(0.5f, 0.65f);
-            ans_txt1.GetComponent<RectTransform>().pivot = new Vector2(0.5f, 0.5f);
+            GameObject panel = CreateAnswerPanel("response_" + i);
+            panel.transform.SetParent(GameObject.Find("mc_answerPanel").transform, false);
+            GameObject btn = CreateButton(btn_txt, btn_pos);
+            btn.transform.SetParent(panel.transform, false);
+            //btn.GetComponent<Button>().onClick.AddListener();
+            RectTransform rect = btn.GetComponent<RectTransform>();
+            rect.anchorMin = new Vector2(1, 0);
+            rect.anchorMax = new Vector2(1, 0);
+            rect.pivot = new Vector2(1, 0);
+            var txt = CreateTextBoxes(answers[i].value);
+            txt.GetComponent<RectTransform>().sizeDelta = new Vector2(width/2 - 40,height/5);
+            txt.transform.SetParent(panel.transform, false);
         }
     }
 
