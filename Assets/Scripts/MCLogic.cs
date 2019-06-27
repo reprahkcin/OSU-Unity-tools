@@ -70,16 +70,16 @@ public class MCLogic : MonoBehaviour
     defaultBtn = Resources.Load("orange_btn") as GameObject;
     btnFont = Resources.Load("Stratum-Bold") as TMP_FontAsset;
     bodyFont = Resources.Load("Kievit-Medium") as TMP_FontAsset;
-    mainPanel = new GameObject();
+
     CreateAnswerObjects();
-    CreateMainPanel();
-    CreateQuestionPanel();
-    CreateQuestion();
-    CreateAnswerGroupPanel();
-    CreateAnswers(MCBank);
+        CreateMainPanel();
+        CreateQuestionPanel();
+        CreateQuestion();
+        CreateAnswerGroupPanel();
+        CreateAnswers(MCBank);
     }
 
-    public void GeneratePopUp(int btnNum)
+    public void GeneratePopUp(int btnID)
     {
         GameObject panel = new GameObject("pop-up");
         panel.transform.SetParent(ParentPanel.transform,false);
@@ -91,8 +91,13 @@ public class MCLogic : MonoBehaviour
         panel.AddComponent<CanvasRenderer>();
         panel.AddComponent<Image>();
         panel.GetComponent<Image>().color = panelColor;
-        panel.AddComponent<VerticalLayoutGroup>();
-        panel.GetComponent<VerticalLayoutGroup>().childControlHeight = true;
+        VerticalLayoutGroup vert = panel.AddComponent<VerticalLayoutGroup>();
+        vert.childAlignment = TextAnchor.MiddleCenter;
+        vert.childForceExpandWidth = false;
+        vert.childForceExpandHeight = false;
+        vert.childControlHeight = false;
+        vert.childControlWidth = false;
+        vert.spacing = 25;
 
         GameObject reasonText = new GameObject("reason-text");
         reasonText.transform.SetParent(panel.transform, false);
@@ -106,17 +111,20 @@ public class MCLogic : MonoBehaviour
         tempText.font = bodyFont;
         tempText.color = Color.black;
         tempText.fontSize = 24f;
-        tempText.text = MCBank[btnNum].reason;
+        tempText.text = MCBank[btnID].reason;
 
         GameObject btn = Instantiate(defaultBtn);
         btn.transform.SetParent(panel.transform,false);
+        RectTransform btnRect = btn.GetComponent<RectTransform>();
+        btnRect.anchorMin = new Vector2(0.5f, 0.5f);
+        btnRect.anchorMax = new Vector2(0.5f, 0.5f);
+        btnRect.pivot = new Vector2(0.5f, 0.5f);
+        btnRect.sizeDelta = new Vector2(200, 65);
         TextMeshProUGUI btnTxt = btn.GetComponentInChildren<TextMeshProUGUI>();
         btnTxt.text = "OK";
         btn.GetComponent<Button>().onClick.AddListener(RemovePopup);
-        //RectTransform btnRect = btn.GetComponent<RectTransform>();
-        //btnRect.anchorMin = new Vector2(0.5f, 0.5f);
-        //btnRect.anchorMax = new Vector2(0.5f, 0.5f);
-        //btnRect.pivot = new Vector2(0.5f, 0.5f);
+        
+
     }
 
     public void RemovePopup()
@@ -206,7 +214,7 @@ public class MCLogic : MonoBehaviour
         vert.childControlWidth = true;
         mcQuestionPanel.transform.SetParent(mainPanel.transform, false);
 
-        GameObject qImgObj = new GameObject();
+        GameObject qImgObj = new GameObject("qImg");
         RectTransform qRect = qImgObj.AddComponent<RectTransform>();
         qRect.sizeDelta = new Vector2(width / 2, height / 2);
         qRect.anchorMax = new Vector2(0.5f, 0.5f);
@@ -298,22 +306,58 @@ public class MCLogic : MonoBehaviour
         return txt;
     }
 
-
     private void CreateAnswers(MCAnswer[] Answers)
     {
         for (int i = 0; i < Answers.Length; i++)
         {
             GameObject panel = CreateAnswerPanel("response_" + i);
             panel.transform.SetParent(GameObject.Find("mc_answerPanel").transform, false);
-            GameObject btn = CreateButton("SUBMIT", btn_pos, i);
-            btn.transform.SetParent(panel.transform, false);
-            RectTransform rect = btn.GetComponent<RectTransform>();
-            rect.anchorMin = new Vector2(1, 0);
-            rect.anchorMax = new Vector2(1, 0);
-            rect.pivot = new Vector2(1, 0);
+            
             var txt = CreateTextBoxes(Answers[i].value);
             txt.GetComponent<RectTransform>().sizeDelta = new Vector2(width / 2 - 40, height / 5);
             txt.transform.SetParent(panel.transform, false);
         }
+
+        GameObject btn1 = CreateButton("SUBMIT", btn_pos, 0);
+        btn1.GetComponent<Button>().onClick.AddListener(delegate { GeneratePopUp(0); });
+        GameObject answerp1 = GameObject.Find("response_0");
+        btn1.transform.SetParent(answerp1.transform, false);
+        RectTransform rect1 = btn1.GetComponent<RectTransform>();
+        rect1.anchorMin = new Vector2(1, 0);
+        rect1.anchorMax = new Vector2(1, 0);
+        rect1.pivot = new Vector2(1, 0);
+
+        GameObject btn2 = CreateButton("SUBMIT", btn_pos, 1);
+        btn2.GetComponent<Button>().onClick.AddListener(delegate { GeneratePopUp(1); });
+        GameObject answerp2 = GameObject.Find("response_1");
+        btn2.transform.SetParent(answerp2.transform, false);
+        RectTransform rect2 = btn2.GetComponent<RectTransform>();
+        rect2.anchorMin = new Vector2(1, 0);
+        rect2.anchorMax = new Vector2(1, 0);
+        rect2.pivot = new Vector2(1, 0);
+
+        GameObject btn3 = CreateButton("SUBMIT", btn_pos, 2);
+        btn3.GetComponent<Button>().onClick.AddListener(delegate { GeneratePopUp(2); });
+        GameObject answerp3 = GameObject.Find("response_2");
+        btn3.transform.SetParent(answerp3.transform, false);
+        RectTransform rect3 = btn3.GetComponent<RectTransform>();
+        rect3.anchorMin = new Vector2(1, 0);
+        rect3.anchorMax = new Vector2(1, 0);
+        rect3.pivot = new Vector2(1, 0);
+
+        GameObject btn4 = CreateButton("SUBMIT", btn_pos, 3);
+        btn4.GetComponent<Button>().onClick.AddListener(delegate { GeneratePopUp(3); });
+        GameObject answerp4 = GameObject.Find("response_3");
+        btn4.transform.SetParent(answerp4.transform, false);
+        RectTransform rect4 = btn4.GetComponent<RectTransform>();
+        rect4.anchorMin = new Vector2(1, 0);
+        rect4.anchorMax = new Vector2(1, 0);
+        rect4.pivot = new Vector2(1, 0);
+
+
+
+
+
+
     }
 }
