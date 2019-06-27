@@ -13,11 +13,18 @@ public class MCLogic : MonoBehaviour
     public GameObject defaultBtn;
     public TMP_FontAsset btnFont;
     public TMP_FontAsset bodyFont;
+    void Start()
+    {
+    defaultBtn = Resources.Load("orange-btn") as GameObject;
+    btnFont = Resources.Load("Stratum-Bold") as TMP_FontAsset;
+    bodyFont = Resources.Load("Kievit-Medium") as TMP_FontAsset;
+    }
 
-
-    public void GeneratePopUp(string reason)
+    public void GeneratePopUp(int btnNum)
     {
         GameObject panel = new GameObject("pop-up");
+        GameObject qSetPanel = GameObject.Find("MCQuestionSet");
+        panel.transform.SetParent(qSetPanel.transform,false);
         panel.AddComponent<RectTransform>();
         RectTransform rect = panel.GetComponent<RectTransform>();
         rect.anchorMin = new Vector2(0.5f,0.5f);
@@ -29,6 +36,7 @@ public class MCLogic : MonoBehaviour
         panel.GetComponent<Image>().color = panelColor;
 
         GameObject reasonText = new GameObject("reason-text");
+        reasonText.transform.SetParent(panel.transform, false);
         var tempRect = reasonText.AddComponent<RectTransform>();
         tempRect.anchorMin = new Vector2(0.5f,0.5f);
         tempRect.anchorMax = new Vector2(0.5f,0.5f);
@@ -37,9 +45,10 @@ public class MCLogic : MonoBehaviour
         var tempText = reasonText.AddComponent<TextMeshProUGUI>();
         tempText.alignment = TextAlignmentOptions.Center;
         tempText.font = bodyFont;
+        tempText.color = Color.black;
         tempText.fontSize = 24f;
-        tempText.text = reason;
-        reasonText.transform.SetParent(panel.transform, false);
+        tempText.text = MCBank[btnNum].reason;
+        
 
         GameObject btn = Instantiate(defaultBtn);
         TextMeshProUGUI btnTxt = btn.GetComponent<TextMeshProUGUI>();

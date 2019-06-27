@@ -40,7 +40,7 @@ public class CanvasPanels : EditorWindow
     // Horizontal Line setup
     //
     private GUIStyle horizontalLine;
-    private GUIStyle OSUTools;
+
 
     private void HorizontalLine(Color color)
     {
@@ -54,25 +54,18 @@ public class CanvasPanels : EditorWindow
         GUI.color = c;
     }
 
-    private Vector2 scrollPos = new Vector2();
+
 
     private void OnGUI()
     {
 
-        GUILayout.BeginArea(new Rect(0,0,EditorGUIUtility.currentViewWidth,position.height));
-        GUILayout.BeginVertical();
+        //GUIStyle gstyle = new GUIStyle();
+        //gstyle.wordWrap = true;
+        //gstyle.padding = new RectOffset(10, 10, 0, 5);
 
-        scrollPos = GUILayout.BeginScrollView(scrollPos, false, true);
-
-        OSUTools = new GUIStyle();
-
-        GUIStyle gstyle = new GUIStyle();
-        gstyle.wordWrap = true;
-        gstyle.padding = new RectOffset(10, 10, 0, 5);
-
-        GUILayout.Label("",OSUTools);
+        GUILayout.Label("");
         GUILayout.Label("Project Colors:", EditorStyles.boldLabel);
-        GUILayout.Label("Select the main colors for your project.", gstyle);
+        GUILayout.Label("Select the main colors for your project.");
         bg_color = EditorGUILayout.ColorField("Background Color", bg_color);
         text_color = EditorGUILayout.ColorField("Text Color", text_color);
 
@@ -85,7 +78,7 @@ public class CanvasPanels : EditorWindow
         else
         {
             GUILayout.Label("Generate Canvas:", EditorStyles.boldLabel);
-            GUILayout.Label("Get started by creating a canvas object. It will be created with a navigation script attached. Use those methods with any created buttons to control the slides.", gstyle);
+            GUILayout.Label("Get started by creating a canvas object. It will be created with a navigation script attached. Use those methods with any created buttons to control the slides.");
 
             width = EditorGUILayout.IntField("Width", width);
             height = EditorGUILayout.IntField("Height", height);
@@ -101,7 +94,7 @@ public class CanvasPanels : EditorWindow
 
 
         GUILayout.Label("Generate Panels:", EditorStyles.boldLabel);
-        GUILayout.Label("Create as many panels as you would like. Run 'Panel Cleanup' function if you remove any along the way.", gstyle);
+        GUILayout.Label("Create as many panels as you would like. Run 'Panel Cleanup' function if you remove any along the way.");
 
         if (GUILayout.Button("Generate Panel")) GeneratePanel();
 
@@ -119,8 +112,7 @@ public class CanvasPanels : EditorWindow
 
         GUILayout.Label("Formatted Text Components:", EditorStyles.boldLabel);
         GUILayout.Label(
-            "Use this portion of the utility to generate text objects with the pre-determined styling. Make sure to select the parent object in the hierarchy before generating.",
-            gstyle);
+            "Use this portion of the utility to generate text objects with the pre-determined styling. Make sure to select the parent object in the hierarchy before generating.");
 
         header_txt = EditorGUILayout.TextField("Header Text", header_txt);
 
@@ -141,9 +133,6 @@ public class CanvasPanels : EditorWindow
 
         //the code of the editor panel
 
-        GUILayout.EndScrollView();
-        GUILayout.EndVertical();
-        GUILayout.EndArea();
 
     }
 
