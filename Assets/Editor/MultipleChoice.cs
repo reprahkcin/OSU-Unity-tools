@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using System;
+using TMPro;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
@@ -30,7 +31,6 @@ public class MultipleChoice : EditorWindow
     private string reason4 = "reason #1";
 
     private Color32 answerPanelColor = new Color32(37, 37, 37, 50);
-
     private MCAnswer[] answers;
 
 
@@ -120,7 +120,6 @@ public class MultipleChoice : EditorWindow
             CreateQuestion();
             CreateAnswerGroupPanel();
             CreateAnswers(answers);
-
         }
     }
 
@@ -151,15 +150,13 @@ public class MultipleChoice : EditorWindow
         Image img = mainPanel.AddComponent<Image>();
         img.color = new Color(255, 255, 255, 0);
         mainPanel.transform.SetParent(Selection.activeTransform, false);
-        MCLogic scr = mainPanel.AddComponent<MCLogic>();
-        scr.MCBank = answers;
-        scr.question = question;
-        scr.bodyFont = Resources.Load("Kievit-Medium") as TMP_FontAsset;
-        scr.btnFont = Resources.Load("Stratum-Bold") as TMP_FontAsset;
-        scr.defaultBtn = Resources.Load("orange_btn") as GameObject;
-        scr.height = height;
-        scr.width = width;
-        scr.MCBank = answers;
+        //MCLogic scr = mainPanel.AddComponent<MCLogic>();
+        //scr.TransferAnswers(answers);
+        //scr.bodyFont = Resources.Load("Kievit-Medium") as TMP_FontAsset;
+        //scr.btnFont = Resources.Load("Stratum-Bold") as TMP_FontAsset;
+        //scr.defaultBtn = Resources.Load("orange_btn") as GameObject;
+        //scr.height = height;
+        //scr.width = width;
     }
 
     private void CreateQuestionPanel()
@@ -192,9 +189,6 @@ public class MultipleChoice : EditorWindow
         qImg.sprite = qSprite;
 
         qImg.transform.SetParent(mcQuestionPanel.transform,false);
-
-
-
     }
 
     private void CreateQuestion()
@@ -306,4 +300,6 @@ public class MultipleChoice : EditorWindow
         GUILayout.Box(GUIContent.none, horizontalLine);
         GUI.color = c;
     }
+
+
 }
