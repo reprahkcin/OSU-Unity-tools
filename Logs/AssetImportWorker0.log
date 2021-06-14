@@ -1,0 +1,101 @@
+Using pre-set license
+
+ COMMAND LINE ARGUMENTS:
+/Volumes/1TB_SSD/Unity Installs/2020.3.11f1/Unity.app/Contents/MacOS/Unity
+-adb2
+-batchMode
+-noUpm
+-name
+AssetImportWorker0
+-projectPath
+/Volumes/1TB_SSD/OSU work/OSU-Unity-tools
+-logFile
+Logs/AssetImportWorker0.log
+-srvPort
+52518
+Successfully changed project path to: /Volumes/1TB_SSD/OSU work/OSU-Unity-tools
+/Volumes/1TB_SSD/OSU work/OSU-Unity-tools
+Using Asset Import Pipeline V2.
+Refreshing native plugins compatible for Editor in 19.22 ms, found 1 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Initialize engine version: 2020.3.11f1 (99c7afb366b3)
+[Subsystems] Discovering subsystems at path /Volumes/1TB_SSD/Unity Installs/2020.3.11f1/Unity.app/Contents/Resources/UnitySubsystems
+[Subsystems] Discovering subsystems at path /Volumes/1TB_SSD/OSU work/OSU-Unity-tools/Assets
+GfxDevice: creating device client; threaded=0
+2021-06-14 13:05:57.742 Unity[7211:183563] iMac preferred device: AMD Radeon R9 M295X (high power)
+2021-06-14 13:05:57.742 Unity[7211:183563] Metal devices available: 1
+2021-06-14 13:05:57.742 Unity[7211:183563] 0: AMD Radeon R9 M295X (high power)
+2021-06-14 13:05:57.743 Unity[7211:183563] Using device AMD Radeon R9 M295X (high power)
+Initializing Metal device caps: AMD Radeon R9 M295X
+Initialize mono
+Mono path[0] = '/Volumes/1TB_SSD/Unity Installs/2020.3.11f1/Unity.app/Contents/Managed'
+Mono path[1] = '/Volumes/1TB_SSD/Unity Installs/2020.3.11f1/Unity.app/Contents/MonoBleedingEdge/lib/mono/unityjit'
+Mono config path = '/Volumes/1TB_SSD/Unity Installs/2020.3.11f1/Unity.app/Contents/MonoBleedingEdge/etc'
+Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56211
+Begin MonoManager ReloadAssembly
+Registering precompiled unity dll's ...
+Register platform support module: /Volumes/1TB_SSD/Unity Installs/2020.3.11f1/PlaybackEngines/WebGLSupport/UnityEditor.WebGL.Extensions.dll
+Register platform support module: /Volumes/1TB_SSD/Unity Installs/2020.3.11f1/Unity.app/Contents/PlaybackEngines/MacStandaloneSupport/UnityEditor.OSXStandalone.Extensions.dll
+Registered in 0.000688 seconds.
+Native extension for OSXStandalone target not found
+Native extension for WebGL target not found
+Refreshing native plugins compatible for Editor in 18.84 ms, found 1 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Mono: successfully reloaded assembly
+- Completed reload, in  1.632 seconds
+Platform modules already initialized, skipping
+Registering precompiled user dll's ...
+Registered in 0.000338 seconds.
+Begin MonoManager ReloadAssembly
+Native extension for OSXStandalone target not found
+Native extension for WebGL target not found
+Refreshing native plugins compatible for Editor in 0.16 ms, found 1 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Mono: successfully reloaded assembly
+- Completed reload, in  1.042 seconds
+Platform modules already initialized, skipping
+========================================================================
+Worker process is ready to serve import requests
+Launching external process: /Volumes/1TB_SSD/Unity Installs/2020.3.11f1/Unity.app/Contents/Tools/UnityShaderCompiler
+Launched and connected shader compiler UnityShaderCompiler after 0.01 seconds
+Refreshing native plugins compatible for Editor in 0.15 ms, found 1 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 761 Unused Serialized files (Serialized files now loaded: 0)
+System memory in use before: 98.0 MB.
+System memory in use after: 98.0 MB.
+
+Unloading 13 unused Assets to reduce memory usage. Loaded Objects now: 1209.
+Total: 1.885594 ms (FindLiveObjects: 0.147628 ms CreateObjectMapping: 0.023258 ms MarkObjects: 1.631974 ms  DeleteObjects: 0.081538 ms)
+
+========================================================================
+Received Import Request.
+  path: Assets/Scenes/Testing Scene.unity
+  artifactKey: Guid(4049071ee97fad44e9ccc07c0e14d27c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Scenes/Testing Scene.unity using Guid(4049071ee97fad44e9ccc07c0e14d27c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '34541bba4e5a75d6d867a211cc9b843c') in 0.013008 seconds
+  Import took 0.014628 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000243 seconds.
+  path: Assets/Button.prefab
+  artifactKey: Guid(f8e70b0e8a941d246870965b954e063c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Button.prefab using Guid(f8e70b0e8a941d246870965b954e063c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '7d5316b1eb9b827ec1eeb8789a22f181') in 0.913810 seconds
+  Import took 0.915430 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000233 seconds.
+  path: Assets/palmtree.png
+  artifactKey: Guid(6984eb53dd3e06746a94ee11b65c6869) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/palmtree.png using Guid(6984eb53dd3e06746a94ee11b65c6869) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'b5d49d99d0392de4977be7c4fd03f2b1') in 1.040251 seconds
+  Import took 1.041829 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 4.987681 seconds.
+  path: Assets/Scenes/SampleScene.unity
+  artifactKey: Guid(9fc0d4010bbf28b4594072e72b8655ab) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Scenes/SampleScene.unity using Guid(9fc0d4010bbf28b4594072e72b8655ab) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '3f67b05110f46d67b1e394cea2159869') in 0.006202 seconds
+  Import took 0.008179 seconds .
+
+AssetImportWorkerClient::OnTransportError - code=2 error=End of file
